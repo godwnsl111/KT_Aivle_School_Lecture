@@ -1,0 +1,4 @@
+https://github.com/ 에 로그인해서 New repository 생성(Name 결정, Public/private 여부 설정)
+생성하면 다음 화면에 있는 주소를 가져와서(지금 이건 https://github.com/godwnsl111/KT_Aivle_School_Lecture.git)
+VScode의 Source Control 탭 - Views and More Actions(점 3개) - Remote - Add remote 를 클릭하면 위에 뜨는 창에 붙여넣고 이름을 붙여준다
+일단 여기까지만 쓰고 Commit 을 클릭해보자(저장은 당연히 해야한다) - 누르기 전에 윗칸에서 Commit의 제목도 붙여준다
