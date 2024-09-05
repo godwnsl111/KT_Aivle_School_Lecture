@@ -1,0 +1,29 @@
+폴더를 하나 생성해서 거기에서 한다. 이건 C:\Users\User\P1 에서 한다.
+Anaconda Prompt 에 cd P1 (위에서 생성한 폴더명) 입력, 이후 경로로 들어갔으면 jupyter lab 입력.
+하면 뭔가 주르륵 내려가다가 JupyterLab 이 실행된다.
+
+자료형
+1. 리스트(list)
+    대괄호 [] 로 선언한다. ex) list_a = [1,2,3,4,5]
+    리스트 안에 리스트가 포함될 수도 있다.
+        Range 함수 - 순차 증감값으로 리스트를 생성할 때 - range(시작값, 끝값, 증감값) 끝값은 범위에 포함되지 않는다.
+    리스트 조회
+        인덱스 값으로 조회 - 0번부터 시작한다 - 반대로 끝에서부터 세면 -1부터 센다.
+        인덱스 범위 조회 - list(시작인덱스:끝인덱스) - 생략된다면 그쪽 끝까지 조회한다.
+    리스트 수정
+        값 추가 - .append() 함수 / list + [추가할 값] : list1 + list2 = appended list
+        값 수정 - list[인덱스] = 값 - 인덱스로 값을 조회하고 해당 자리를 수정
+        값 삭제 - del list[인덱스] - 인덱스로 값을 조회하고 해당 자리를 삭제 / list.remove(값) - 특정 값을 찾아서 삭제
+
+2. 딕셔너리(dictionary)
+    중괄호 {} 안에 key : value 의 형태로 선언 - 여러 자료형들의 묶음 - 값들의 형태도 다를 수 있음
+        Value - 다양한 형태의 변수 / Key - Value 변수의 이름
+        딕셔너리 조회 - dictionary[key] - Key로 Value 를 조회
+            .keys() : key만 조회 / .values() : Value만 조회 / .items() : 둘을 쌍(tuple)으로 조회
+        딕셔너리 수정
+            추가 - dictionary['없는 key'] = Value
+            수정 - dictionary['있는 key'] = Value
+            삭제 - del dictionary['key']
+
+3. 튜플(tuple)
+    좌표, 순서쌍을 담는 자료형
