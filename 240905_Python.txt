@@ -2,28 +2,78 @@
 Anaconda Prompt 에 cd P1 (위에서 생성한 폴더명) 입력, 이후 경로로 들어갔으면 jupyter lab 입력.
 하면 뭔가 주르륵 내려가다가 JupyterLab 이 실행된다.
 
+
 자료형
-1. 리스트(list)
-    대괄호 [] 로 선언한다. ex) list_a = [1,2,3,4,5]
-    리스트 안에 리스트가 포함될 수도 있다.
-        Range 함수 - 순차 증감값으로 리스트를 생성할 때 - range(시작값, 끝값, 증감값) 끝값은 범위에 포함되지 않는다.
-    리스트 조회
-        인덱스 값으로 조회 - 0번부터 시작한다 - 반대로 끝에서부터 세면 -1부터 센다.
-        인덱스 범위 조회 - list(시작인덱스:끝인덱스) - 생략된다면 그쪽 끝까지 조회한다.
-    리스트 수정
-        값 추가 - .append() 함수 / list + [추가할 값] : list1 + list2 = appended list
-        값 수정 - list[인덱스] = 값 - 인덱스로 값을 조회하고 해당 자리를 수정
-        값 삭제 - del list[인덱스] - 인덱스로 값을 조회하고 해당 자리를 삭제 / list.remove(값) - 특정 값을 찾아서 삭제
+    1. 리스트(list)
+        대괄호 [] 로 선언한다. ex) list_a = [1,2,3,4,5]
+        리스트 안에 리스트가 포함될 수도 있다.
+            Range 함수 - 순차 증감값으로 리스트를 생성할 때 - range(시작값, 끝값, 증감값) 끝값은 범위에 포함되지 않는다.
+        리스트 조회
+            인덱스 값으로 조회 - 0번부터 시작한다 - 반대로 끝에서부터 세면 -1부터 센다.
+            인덱스 범위 조회 - list(시작인덱스:끝인덱스) - 생략된다면 그쪽 끝까지 조회한다.
+        리스트 수정
+            값 추가 - .append() 함수 / list + [추가할 값] : list1 + list2 = appended list
+            값 수정 - list[인덱스] = 값 - 인덱스로 값을 조회하고 해당 자리를 수정
+            값 삭제 - del list[인덱스] - 인덱스로 값을 조회하고 해당 자리를 삭제 / list.remove(값) - 특정 값을 찾아서 삭제
 
-2. 딕셔너리(dictionary)
-    중괄호 {} 안에 key : value 의 형태로 선언 - 여러 자료형들의 묶음 - 값들의 형태도 다를 수 있음
-        Value - 다양한 형태의 변수 / Key - Value 변수의 이름
-        딕셔너리 조회 - dictionary[key] - Key로 Value 를 조회
-            .keys() : key만 조회 / .values() : Value만 조회 / .items() : 둘을 쌍(tuple)으로 조회
-        딕셔너리 수정
-            추가 - dictionary['없는 key'] = Value
-            수정 - dictionary['있는 key'] = Value
-            삭제 - del dictionary['key']
+    2. 딕셔너리(dictionary)
+        중괄호 {} 안에 key : value 의 형태로 선언 - 여러 자료형들의 묶음 - 값들의 형태도 다를 수 있음
+            Value - 다양한 형태의 변수 / Key - Value 변수의 이름
+            딕셔너리 조회 - dictionary[key] - Key로 Value 를 조회
+                .keys() : key만 조회 / .values() : Value만 조회 / .items() : 둘을 쌍(tuple)으로 조회
+            딕셔너리 수정
+                추가 - dictionary['없는 key'] = Value
+                수정 - dictionary['있는 key'] = Value
+                삭제 - del dictionary['key']
 
-3. 튜플(tuple)
-    좌표, 순서쌍을 담는 자료형
+    3. 튜플(tuple)
+        좌표, 순서쌍을 담는 자료형
+
+
+조건문과 반복문
+    1. Bool 연산자
+        주어진 조건에 대해 참/거짓 으로 결과를 반환하는 연산자 - True / False
+        == : 같은가? / != : 같지 않은가? / and : 양쪽 모두 참 / or : 하나라도 참 / not : 논리값의 반대
+    
+    2. 조건제어 if
+        if 조건문1 :
+            실행문1
+        조건문1이 True이면 실행문1을 실행 - False라면 아무 일도 없음
+
+        if 조건문1 :
+            실행문1
+        else :
+            실행문2
+        조건문1이 True이면 실행문1을 실행 - False라면 실행문2 실행
+
+        if 조건문1 :
+            실행문1
+        elif 조건문2 :
+            실행문2
+        else :
+            실행문3
+        조건문1이 True이면 실행문1을 실행 - False이면서 조건문2가 True이면 실행문2 실행 - 또 False라면 실행문3 실행
+    
+    3. for loop
+        for i in range():
+            실행문
+        range에서 값을 하나씩 꺼내서 실행문 실행 - 마지막 값까지 실행하거나, break 구문을 만나면 종료
+    
+    4. while loop
+        while 조건문1 :
+            실행문
+            조건변경
+        조건문이 True라면 실행문 실행 - 조건을 변경 후 다시 조건문1로 돌아가서 반복 - False이거나, break 구문을 만나면 종료
+
+
+함수
+    1. 입력 매개변수(input)
+        def 로 정의
+
+    2. output
+        결과를 출력하는 2가지 방법
+            print : '출력'만 수행
+            return : '출력' + 결과를 외부로 반환 - 이 결과값을 어딘가에 쓰려면 print가 아닌 return이 필요함 - 함수는 return을 만나면 종료
+    
+    3. 예외처리
+        나중에 계속...
