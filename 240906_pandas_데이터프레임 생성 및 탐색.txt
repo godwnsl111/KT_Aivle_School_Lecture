@@ -1,0 +1,78 @@
+데이터프레임 생성
+    데이터프레임 이해
+        pandas를 사용하는 목적이 데이터프레임을 사용하기 위함이라 생각해도 무방하다.
+        데이터를 처리, 조회, 분석하는 가장 효율적인 방법이 데이터프레임을 이용하는 것
+        테이블, 엑셀의 형태 - 직접 만들 수도 있지만, 보통은 csv, 엑셀 파일, 혹은 DB에서 읽어온다.
+        인덱스(행 이름)와 열 이름 이 있고 없고에 따라 다른 형태를 갖는다.
+            인덱스 - 행을 지정할 때 사용하는 정보 / 열 이름 - 열을 지정할 때 사용하는 정보
+            둘 다 없는 경우 - 보통 0부터 시작하는 숫자가 되는데, 사실 별로 볼 일 없을 것
+            열 이름만 지정된 경우 - 특별히 인덱스를 지정할 필요가 없는 경우 - 가장 볼 일 많은 형태
+            인덱스와 열 이름 모두 지정된 경우 - 인덱스가 날짜로 지정되는 경우가 많음
+    
+    데이터프레임 직접 만들기
+        pd.DataFrame() 함수로 만들 수 있다 - 대부분 리스트, 딕셔너리, numpy 배열로부터 만든다.
+        데이터, 열 이름, 인덱스 이름 의 3가지가 필요하다.
+        열 이름과 인덱스 이름을 지정하지 않는다면 각각 열 번호, 행 번호에 기반한 정수 0, 1, 2, ... 가 이름이 된다.
+
+        import pandas as pd 로 라이브러리를 불러온다.
+        딕셔너리로 데이터프레임을 만들면 딕셔너리의 key가 열 이름이 된다. 인덱스를 지정하지 않으면 행 번호가 인덱스가 된다.
+            ex) dict1 = {'Name': ['Gildong', 'Sarang', 'Jiemae', 'Yeoin'],
+                         'Level': ['Gold', 'Bronze', 'Silver', 'Gold'],
+                         'Score': [56000, 23000, 44000, 52000]}
+                df = pd.DataFrame(dict1)
+                        Name     Level  Score
+                    0  Gildong    Gold  56000
+                    1   Sarang  Bronze  23000
+                    2   Jiemae  Silver  44000
+                    3    Yeoin    Gold  52000
+    
+    CSV파일 읽어오기
+        read.csv() 함수로 csv 파일에서 읽어온다. 분석용 데이터는 대부분 파일에서 가져오니 이거 중요하다!
+            ex) path = 'https://raw.githubusercontent.com/DA4BAM/dataset/master/titanic_simple.csv'
+                data = pd.read_csv(path)
+                data.head(10) - 이건 상위 10개 행만 확인하는 함수
+
+데이터프레임 탐색
+    파일에서 불러온 데이터의 크기, 내용, 분포, 누락된 값 등을 확인 - 이를 통해 전처리 필요 여부 결정 - 데이터를 알아야 분석도 한다
+        자주 사용할 만한 메서드
+            head() - 상위 데이터 확인 / tail() - 하위 데이터 확인 / shape - 데이터프레임 크기 / values - 값 정보 확인(2차원 numpy 배열)
+            columns - 열 정보 확인 / dtypes - 열 자료형 확인 / info() - 열에 대한 상세정보 / describe() - 기초통계정보 확인
+        상위, 하위 일부 데이터, 크기 확인
+            head(), tail() 메서드 - 개수를 지정하지 않으면 default로 5개가 조회된다
+            shape - (rows, cols) 값을 갖는 tuple 형태로 확인 가능 - 처리할 데이터 양을 확인하는 목적으로 많이 사용
+                ex) data.shape 형태로 사용
+        열, 행 정보 보기
+            data.columns - 열 확인
+        자료형 확인
+            int64 - 정수형 데이터 / float64 - 실수형 데이터 / object - 문자열 데이터(string)
+            data.dtypes - 열 자료형 확인 / data.info() - 열 자료형, 값 개수 확인
+        기초통계정보 확인
+            describe() 메서드 - 개수(count), 평균(mean), 표준편차(std), 최솟값(min), 사분위값(25%, 50%, 75%), 최댓값(max) 표시
+                ex) data.describe()
+
+정렬해서 보기
+    인덱스를 기준으로 정렬하는 방법과 특정 열을 기준으로 정렬하는 방법
+    sort_values() 메서드로 '특정 열'을 기준으로 정렬
+    ascending 옵션을 설정해 오름차순, 내림차순 설정 - ascending = True 면 오름차순(기본값) False면 내림차순
+        ex) data.sort_values(by='MonthlyIncome', ascending=False) - 단일 열 정렬
+            data.sort_values(by=['JobSatisfaction', 'MonthlyIncome'], ascending=[True, False]) - 복합 열 정렬
+            temp = data.sort_values(by=['JobSatisfaction', 'MonthlyIncome'], ascending=[True, False]) - 복합 열 정렬 별도로 저장
+            temp.reset_index(drop = True) - 인덱스 리셋
+
+기본 집계
+    이해를 위해 고유값, 합, 평균, 최댓값, 최솟값 등을 확인
+    고유값 확인
+        고유값 확인
+        범주형 열인지 확일할 때 사용 - unique() 메서드 - 결과값은 배열 형태가 된다
+            ex) data['MaritalStatus'].unique()
+        고유값과 개수 확인
+            value_counts() - 결과값은 시리즈 형태가 된다
+                data['MaritalStatus'].value_counts()
+    기본 집계 메서드 사용
+        1차 집계 후 분석을 진행하는 경우가 많으므로 중요 - 이후 Groupby 에서 같이 사용
+            ex) data['MonthlyIncome'].sum() - 열 합계 조회
+                data['MonthlyIncome'].sum() - 열 최댓값 조회
+                data[['Age', 'MonthlyIncome']].mean() - age, MonthlyIncome 열의 평균값 확인
+                data[['Age', 'MonthlyIncome']].median() - age, MonthlyIncome 열의 중앙값 확인
+
+
