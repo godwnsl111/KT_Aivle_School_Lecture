@@ -32,47 +32,115 @@
                 data = pd.read_csv(path)
                 data.head(10) - 이건 상위 10개 행만 확인하는 함수
 
+
 데이터프레임 탐색
     파일에서 불러온 데이터의 크기, 내용, 분포, 누락된 값 등을 확인 - 이를 통해 전처리 필요 여부 결정 - 데이터를 알아야 분석도 한다
-        자주 사용할 만한 메서드
-            head() - 상위 데이터 확인 / tail() - 하위 데이터 확인 / shape - 데이터프레임 크기 / values - 값 정보 확인(2차원 numpy 배열)
-            columns - 열 정보 확인 / dtypes - 열 자료형 확인 / info() - 열에 대한 상세정보 / describe() - 기초통계정보 확인
-        상위, 하위 일부 데이터, 크기 확인
-            head(), tail() 메서드 - 개수를 지정하지 않으면 default로 5개가 조회된다
-            shape - (rows, cols) 값을 갖는 tuple 형태로 확인 가능 - 처리할 데이터 양을 확인하는 목적으로 많이 사용
-                ex) data.shape 형태로 사용
-        열, 행 정보 보기
-            data.columns - 열 확인
-        자료형 확인
-            int64 - 정수형 데이터 / float64 - 실수형 데이터 / object - 문자열 데이터(string)
-            data.dtypes - 열 자료형 확인 / data.info() - 열 자료형, 값 개수 확인
-        기초통계정보 확인
-            describe() 메서드 - 개수(count), 평균(mean), 표준편차(std), 최솟값(min), 사분위값(25%, 50%, 75%), 최댓값(max) 표시
-                ex) data.describe()
+    
+    자주 사용할 만한 메서드
+        head() - 상위 데이터 확인 / tail() - 하위 데이터 확인 / shape - 데이터프레임 크기 / values - 값 정보 확인(2차원 numpy 배열)
+        columns - 열 정보 확인 / dtypes - 열 자료형 확인 / info() - 열에 대한 상세정보 / describe() - 기초통계정보 확인
+    상위, 하위 일부 데이터, 크기 확인
+        head(), tail() 메서드 - 개수를 지정하지 않으면 default로 5개가 조회된다
+        shape - (rows, cols) 값을 갖는 tuple 형태로 확인 가능 - 처리할 데이터 양을 확인하는 목적으로 많이 사용
+            ex) data.shape 형태로 사용
+    열, 행 정보 보기
+        data.columns - 열 확인
+    자료형 확인
+        int64 - 정수형 데이터 / float64 - 실수형 데이터 / object - 문자열 데이터(string)
+        data.dtypes - 열 자료형 확인 / data.info() - 열 자료형, 값 개수 확인
+    기초통계정보 확인
+        describe() 메서드 - 개수(count), 평균(mean), 표준편차(std), 최솟값(min), 사분위값(25%, 50%, 75%), 최댓값(max) 표시
+            ex) data.describe()
 
-정렬해서 보기
-    인덱스를 기준으로 정렬하는 방법과 특정 열을 기준으로 정렬하는 방법
-    sort_values() 메서드로 '특정 열'을 기준으로 정렬
-    ascending 옵션을 설정해 오름차순, 내림차순 설정 - ascending = True 면 오름차순(기본값) False면 내림차순
-        ex) data.sort_values(by='MonthlyIncome', ascending=False) - 단일 열 정렬
-            data.sort_values(by=['JobSatisfaction', 'MonthlyIncome'], ascending=[True, False]) - 복합 열 정렬
-            temp = data.sort_values(by=['JobSatisfaction', 'MonthlyIncome'], ascending=[True, False]) - 복합 열 정렬 별도로 저장
-            temp.reset_index(drop = True) - 인덱스 리셋
+    정렬해서 보기
+        인덱스를 기준으로 정렬하는 방법과 특정 열을 기준으로 정렬하는 방법
+        sort_values() 메서드로 '특정 열'을 기준으로 정렬
+        ascending 옵션을 설정해 오름차순, 내림차순 설정 - ascending = True 면 오름차순(기본값) False면 내림차순
+            ex) data.sort_values(by='MonthlyIncome', ascending=False) - 단일 열 정렬
+                data.sort_values(by=['JobSatisfaction', 'MonthlyIncome'], ascending=[True, False]) - 복합 열 정렬
+                temp = data.sort_values(by=['JobSatisfaction', 'MonthlyIncome'], ascending=[True, False]) - 복합 열 정렬 별도로 저장
+                temp.reset_index(drop = True) - 인덱스 리셋
 
-기본 집계
-    이해를 위해 고유값, 합, 평균, 최댓값, 최솟값 등을 확인
-    고유값 확인
+    기본 집계
+        이해를 위해 고유값, 합, 평균, 최댓값, 최솟값 등을 확인
         고유값 확인
-        범주형 열인지 확일할 때 사용 - unique() 메서드 - 결과값은 배열 형태가 된다
-            ex) data['MaritalStatus'].unique()
-        고유값과 개수 확인
-            value_counts() - 결과값은 시리즈 형태가 된다
-                data['MaritalStatus'].value_counts()
-    기본 집계 메서드 사용
-        1차 집계 후 분석을 진행하는 경우가 많으므로 중요 - 이후 Groupby 에서 같이 사용
-            ex) data['MonthlyIncome'].sum() - 열 합계 조회
-                data['MonthlyIncome'].sum() - 열 최댓값 조회
-                data[['Age', 'MonthlyIncome']].mean() - age, MonthlyIncome 열의 평균값 확인
-                data[['Age', 'MonthlyIncome']].median() - age, MonthlyIncome 열의 중앙값 확인
+            고유값 확인
+            범주형 열인지 확일할 때 사용 - unique() 메서드 - 결과값은 배열 형태가 된다
+                ex) data['MaritalStatus'].unique()
+            고유값과 개수 확인
+                value_counts() - 결과값은 시리즈 형태가 된다
+                    data['MaritalStatus'].value_counts()
+        기본 집계 메서드 사용
+            1차 집계 후 분석을 진행하는 경우가 많으므로 중요 - 이후 Groupby 에서 같이 사용
+                ex) data['MonthlyIncome'].sum() - 열 합계 조회
+                    data['MonthlyIncome'].sum() - 열 최댓값 조회
+                    data[['Age', 'MonthlyIncome']].mean() - age, MonthlyIncome 열의 평균값 확인
+                    data[['Age', 'MonthlyIncome']].median() - age, MonthlyIncome 열의 중앙값 확인
 
 
+데이터프레임 조회
+    보고자 하는 데이터를 즉시 조회할 수 있도록 익숙해져야 함 - 방법이 다양한데, 하나를 선택해 일관되게 사용하기를 권고
+    
+    데이터 읽어오기
+        ex) path = 'https://raw.githubusercontent.com/DA4BAM/dataset/master/titanic_simple.csv'
+            data = pd.read_csv(path)
+            data.head()
+        시리즈와 데이터프레임
+            데이터프레임 : 2차원 구조 - 시리즈 : 1차원 구조 - 데이터프레임에서 '열' 하나를 떼어내면 그게 시리즈
+    특정 열 조회
+        시리즈(1차원)으로 조회하기 - DataFrame['column'] / DataFrame.column 형태로 조회
+        데이터프레임(2차원)으로 조회하기 - DataFrame[['column']] - 대괄호 2개가 아니라 '칼럼이름'을 '리스트'로 입력한 것
+            ex) data['Attribution'] / data.Attribution - 시리즈로 조회
+                data[['Attribution', 'Age']] - 데이터프레임으로 조회
+    조건으로 조회
+        .loc[행 조건, 열 이름] 형태 - 조건을 만족하는 데이터만 조회 - 조건문은 True/False
+        열 이름은 생략 가능 - 열 이름이 1개라면 결과물은 시리즈, 여러개(리스트)라면 결과물은 데이터프레임이 된다
+            ex) data.loc[data['DistanceFromHome'] > 10] - 'DistanceFromHome'(열 값)이 10보다 큰 행 조회
+        조건문을 여러개 쓴다면 and과 or 대신 &과 | 연산자를 사용하며, 각 조건은 소괄호로 묶어야 함
+            ex) data.loc[(data['DistanceFromHome'] > 10) & (data['JobSatisfaction'] == 4)]
+                data.loc[(data['DistanceFromHome'] > 10) | (data['JobSatisfaction'] == 4)]
+        isin(), between()
+            isin([값1, 값2, ... 값n]) - 값1, 값2 ... 값n 인 데이터만 조회 - 값들은 리스트 형태로 입력
+                ex) data.loc[data['JobSatisfaction'].isin([1,4])] - 'JobSatisfaction'이 1 혹은 4인 데이터만 조회
+                    이는 or 조건문으로 data.loc[(data['JobSatisfaction'] == 1) | (data['JobSatisfaction'] == 4)] 와 같다
+            between(값1, 값2) : 값1 ~ 값2 범위 안의 데이터만 조회
+                ex) data.loc[data['Age'].between(25, 30)] - 25부터 30 조회(기본값. both)
+                    data.loc[data['Age'].between(25, 30, inclusive='left')] - 25부터 29 조회(왼쪽만 포함)
+                    data.loc[data['Age'].between(25, 30, inclusive='right')] - 26부터 30 조회(오른쪽만 포함)
+                    data.loc[data['Age'].between(25, 30, inclusive='neither')] - 29부터 29 조회(양쪽 모두 미포함)
+                    이는 and 조건문으로 data.loc[(data['Age'] >= 25) & (data['Age'] <= 30)] 와 같다
+        조건을 만족하는 행의 일부 열 조회
+            df.loc[조건, ['열 이름1', '열 이름2', ... ]] 형태로 조회할 열을 리스트로 지정 - 2차원 데이터프레임 형태로 조회
+                ex) data.loc[data['MonthlyIncome'] >= 10000, ['Age']] - 하나의 열 조회
+                    data.loc[data['MonthlyIncome'] >= 10000, ['Age', 'MaritalStatus', 'TotalWorkingYears']] - 여러 열 조회
+
+
+데이터프레임 집계
+    상세 데이터가 아닌 집계된 데이터에 대한 분석을 자주 요구하니 익숙해져야 함
+    sum(), mean(), max(), min(), count() 를 사용해 지정한 열 또는 열들을 기준으로 집계
+    
+    열 하나 집계
+        특정 열의 값 합은 다음과 같이 구한다 - data['MonthlyIncome'].sum()
+        각 열의 평균은 다음과 같다 - data[['MonthlyIncome', 'TotalWorkingYears']].mean()
+
+        집계하기
+            as_index = True 를 설정하면 집계 기준이 되는 열이 인덱스 열이 된다 - 집계 결과가 data 열만 가지니 시리즈가 된다
+            ex) data.groupby('MaritalStatus', as_index=True)['Age'].mean() - MaritalStatus 별 age 평균 >> 시리즈
+                data.groupby('MaritalStatus', as_index=True)[['Age']].mean() - [[]] 는 열이 여럿이라는 의미라서 데이터프레임
+                data.groupby('MaritalStatus', as_index=False)[['Age']].mean() - as_index=False 설정 시 행 번호를 기반으로 인덱스 설정
+
+        데이터프레임으로 선언
+            집계 결과를 새로운 데이터프레임으로 선언하여 사용하는 경우 - 결과를 반복해서 사용하거나, 분석 대상이 되는 경우
+                ex) data.groupby('MaritalStatus', as_index=False)[['Age']].mean()
+
+    여러 열 집계
+        [['feature1','feature2']].sum() 형태와 같이 집계 대상 열을 리스트로 지정
+            ex) data.groupby('MaritalStatus', as_index=False)[['Age','MonthlyIncome']].mean()
+            sum() 메서드 앞에 아무 열도 지정하지 않으면 기준열 이외의 모든 열에 대한 집계가 수행됨
+                ex) data.groupby('MaritalStatus', as_index=False).sum()
+            by=['feature1','feature2'] 처럼 집계 기준 열을 여럿 설정할 수도 있다
+                ex) data_sum = data.groupby(['MaritalStatus', 'Gender'], as_index=False)[['Age','MonthlyIncome']].mean()
+    
+    여러 함수로 한꺼번에 집계
+        df.groupby().agg(['함수1','함수2', ... ]) 의 형태
+            ex) data_agg = data.groupby('MaritalStatus', as_index=False)[['MonthlyIncome']].agg(['min','max','mean'])
