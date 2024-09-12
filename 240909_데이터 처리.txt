@@ -1,0 +1,71 @@
+데이테프레임 변경
+    환경준비 - 라이브러리 불러오기
+        import numpy as np / import pandas as pd
+        import matplotlib.pyplot as plt / import seaborn as sns
+
+        예제용 데이터 url
+            'https://raw.githubusercontent.com/DA4BAM/dataset/master/titanic_simple.csv'
+            'https://raw.githubusercontent.com/DA4BAM/dataset/master/air2.csv'
+        불러오기
+            path = 'https://raw.githubusercontent.com/DA4BAM/dataset/master/titanic_simple.csv'
+            titanic = pd.read_csv(path)
+        
+    범주형 변수
+        수치화 : 기초통계량
+            범주형 변수는 범주별 빈도수와 비율을 확인
+            리스트.count('값') - 해당값이 몇개 있는지 count - 이걸 전체 개수로 나눠주면 비율이 됨
+                범주별 빈도수
+                    .value_counts() - 범주의 개수와 상관없이 범주별 개수를 count
+                        ex) titanic['Embarked'].value_counts()
+                범주별 비율
+                    .value_counts(normalize = True)
+                        ex) titanic['Embarked'].value_counts(normalize = True)
+    
+    시각화
+        bar chart
+            seaborn의 countplot - plt.bar()를 이용하려면 먼저 집계한 후 결과를 가지고 그래프를 그려야 함 - 집계 + bar plot을 한번에!
+            ex) sns.countplot(x = 'Pclass', data = titanic)
+                plt.grid() # 그리드 모양 표시
+                plt.show() # 출력
+        
+        pie chart
+            범주별 비율 비교할 때 사용 - 이것도 집계 먼저 해야 함
+            plt.pie(값, labels = 범주이름, autopct = '%.2f%%') - autopct = '%.2f%%' 그래프에 표시할 값 비율 설정 - 2f는 소수점 두자리
+
+
+데이터프레임 결합
+    붙이기 concat()
+        세로로 합치기 - axis = 0 - join = 'inner' / 'outer' - inner랑 outer가 무슨 차이지?
+            ex) pd.concat([df1,df2], axis=0, join='inner')
+                pd.concat([df1,df2], axis=0, join='outer')
+        가로로 합치기 - axis = 1 - join = 'inner' / 'outer'
+            ex) 세로로 합치기에서 axis 만 1로 바뀐다
+    조인(Join)(merge)
+        자동으로 key를 잡아준다 / 기본은 inner join
+            ex) df1
+                    A   B   C
+                0   1   15  20
+                1   2   30  25
+
+                df2
+                    A   D
+                0   2   20
+                1   3   35
+
+            inner merge
+                ex) pd.merge(df1, df2, how = 'inner', on='A')
+                    pd.merge(df1, df2, how = 'inner')
+                    pd.merge(df1, df2) - 이 3개는 모두 결과가 같다
+                        A   B   C   D
+                    0   2   30  25  20
+            left merge
+                ex) pd.merge(df1, df2, how = 'left')
+                        A   B   C   D
+                    0   1   15  20  NaN
+                    1   2   30  25  20.0
+            right merge
+                ex) pd.merge(df1, df2, how = 'right')
+                        A   B    C    D
+                    0   2   30.0 25.0 20    
+                    1   3   NaN  NaN  35
+                    
