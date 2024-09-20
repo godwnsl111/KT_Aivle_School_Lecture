@@ -34,13 +34,13 @@
 
 
 데이터프레임 결합
-    붙이기 concat()
+    붙이기 concat() - df의 구조를 기반으로
         세로로 합치기 - axis = 0 - join = 'inner' / 'outer' - inner랑 outer가 무슨 차이지?
             ex) pd.concat([df1,df2], axis=0, join='inner')
                 pd.concat([df1,df2], axis=0, join='outer')
         가로로 합치기 - axis = 1 - join = 'inner' / 'outer'
             ex) 세로로 합치기에서 axis 만 1로 바뀐다
-    조인(Join)(merge)
+    조인(Join)(merge) - 특정 열의 값을 기준으로 옆에 붙인다
         자동으로 key를 잡아준다 / 기본은 inner join
             ex) df1
                     A   B   C
@@ -52,20 +52,27 @@
                 0   2   20
                 1   3   35
 
-            inner merge
+            inner merge - 같은 값만
                 ex) pd.merge(df1, df2, how = 'inner', on='A')
                     pd.merge(df1, df2, how = 'inner')
                     pd.merge(df1, df2) - 이 3개는 모두 결과가 같다
                         A   B   C   D
                     0   2   30  25  20
-            left merge
+            left merge - 왼쪽 df는 모두, 오른쪽 df는 같은 값만
                 ex) pd.merge(df1, df2, how = 'left')
                         A   B   C   D
                     0   1   15  20  NaN
                     1   2   30  25  20.0
-            right merge
+            right merge - 오른쪽 df는 모두, 왼쪽 df는 같은 값만
                 ex) pd.merge(df1, df2, how = 'right')
                         A   B    C    D
                     0   2   30.0 25.0 20    
                     1   3   NaN  NaN  35
-                    
+    
+    pivot
+        집계된(groupby) 데이터를 재구성 - 즉 집계가 먼저 되어있어야 한다
+        dataframe.pivot(index= , columns = , values = )
+
+
+시계열 데이터 처리
+    시계열 데이터 - 행과 행에 시간의 흐름(순서)가 있고, 행과 행의 시간간격이 동일한 데이터
