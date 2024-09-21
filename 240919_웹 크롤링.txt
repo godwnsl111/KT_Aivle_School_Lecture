@@ -34,8 +34,106 @@ Python을 사용하니까 그 기초를 좀 보자
     selenium 이용 - 브라우저를 직접 열어서 데이터를 받는 방법
 
     EX) 네이버 주식 데이터를 크롤링 해보자
-        절차 : 웹 서비스 분석 - url : chrom devtool
+        절차 : 웹 서비스 분석 - url : chrome devtool
             >> 서버에 데이터 요청 : request(url) - response : json(str)
             >> 서버에서 받은 데이터 파싱(형태 변경) - json(str) - list, dict - DataFrame
-        
-        이거 잘 되고 있는건가
+
+            0. 먼저 requests, pandas 를 import 한다
+                import requests / import pandas as pd
+
+            1. 크롤링하려는 url을 가져온다
+                url = 'https://m.stock.naver.com/api/index/KOSPI/price?pageSize=60&page=1'
+
+            2. 서버에 데이터를 요청한다 >> json(str) 형태로 나온다
+                response = requests.get(url)
+                response
+                이때 response 로 200이 나오는지 확인해야 한다.
+                403이나 500이라면 request가 잘못되었거나 웹 서버에서 수집이 안 되도록 설정된 것 - 이러면 header 설정 혹은 selenium 사용
+
+            3. 서버에서 받은 데이터 파싱(형태 변경) >> 위의 json(str) 형태가 list, dict 로, 여기서 다시 DataFrame으로 변형
+                data = response.json()
+                df = DataFrame(data)
+                df = df[['localTradedAt','closePrice']] // 여기에 들어간 column들은 response.text 로 알 수 있다 
+                df.head(5) // 확인용
+
+            4. 함수화
+                def stock_price(code='KOSPI', page=1, page_size=60):
+                    url = f'https://m.stock.naver.com/api/index/{code}/price?pageSize={page_size}&page={page}'
+                    response = requests.get(url)
+                    data = response.json()
+                    return pd.DataFrame(data)[['localTradedAt', 'closePrice']]
+                이걸 함수로 정의해두고
+                stock_price('KOSDAQ', 3, 5) 처럼 사용할 수 있다
+
+            5. 다른 주제(환율) 실습
+                먼저 URL 가져오고
+                page_size, page = 60, 1
+                url = f'https://m.stock.naver.com/front-api/marketIndex/prices?category=exchange&reutersCode=FX_USDKRW&page={page}&pageSize={page_size}'
+                
+                데이터 요청하고
+                response = requests.get(url)
+                
+                파싱 하고
+                data = response.json()['result']
+                df = pd.DataFrame(data)[['localTradedAt', 'closePrice']]
+                df.tail(2)
+
+                함수화
+                def exchange_rate(code='FX_USDKRW', page=1, page_size=60):
+                    url = f'https://m.stock.naver.com/front-api/marketIndex/prices?category=exchange&reutersCode={code}&page={page}&pageSize={page_size}'
+                    response = requests.get(url)
+                    data = response.json()['result']
+                    return pd.DataFrame(data)[['localTradedAt', 'closePrice']]
+
+            6. 시각화
+                위에서 만든 함수들을 이용해 kospi, kosdaq, 환율의 데이터를 수집하자
+                kp_df = stock_price('KOSPI', page_size=page_size)
+                kd_df = stock_price('KOSDAQ', page_size=page_size)
+                usd_df = exchange_rate(page_size=page_size)
+
+                데이터 전처리 - 데이터 타입을 string 에서 float 로 변경
+                kp_df['closePrice'] = kp_df['closePrice'].apply(lambda data: float(data.replace(',', '')))
+                kd_df['closePrice'] = kd_df['closePrice'].apply(lambda data: float(data.replace(',', '')))
+                usd_df['closePrice'] = usd_df['closePrice'].apply(lambda data: float(data.replace(',', '')))
+
+                데이터 전처리 - merge로 날짜 데이터 맞추기
+                merge_df = pd.merge(kp_df, kd_df, on='localTradedAt') >> 코스피랑 코스닥 맞추고
+                merge_df = pd.merge(merge_df, usd_df, on='localTradedAt') >> 그걸 다시 환율이랑 맞춘 다음
+                merge_df.columns = ['date', 'kospi', 'kosdaq', 'usd'] >> 열이름 재정의. 이건 필수는 아니지만 하면 보기 편하다
+
+                시각화를 위해 matplotlib import
+                import matplotlib.pyplot as plt
+
+                그래프 생성
+                plt.figure(figsize=(20, 3))
+                plt.plot(kp_df['localTradedAt'], kp_df['closePrice'], label='kospi')
+                plt.plot(kd_df['localTradedAt'], kd_df['closePrice'], label='kosdaq')
+                plt.plot(usd_df['localTradedAt'], usd_df['closePrice'], label='usd')
+                plt.xticks(kp_df['localTradedAt'][::5])
+                plt.legend()
+                plt.show()
+
+            7. 데이터 스케일링 >> 이게 뭐지?
+                데이터를 일정한 범위 내로 변환하여, 머신러닝 알고리즘이 데이터를 더 효과적으로 학습할 수 있도록 돕는 전처리 과정
+                여기서는 min max scaling으로
+
+                먼저 sklearn을 import
+                from sklearn.preprocessing import minmax_scale
+
+                그리고 scaling
+                minmax_scale(kp_df['closePrice'])
+
+                다시 시각화
+                plt.figure(figsize=(20, 3))
+                plt.plot(kp_df['localTradedAt'], minmax_scale(kp_df['closePrice']), label='kospi')
+                plt.plot(kd_df['localTradedAt'], minmax_scale(kd_df['closePrice']), label='kosdaq')
+                plt.plot(usd_df['localTradedAt'], minmax_scale(usd_df['closePrice']), label='usd')
+                plt.xticks(kp_df['localTradedAt'][::5])
+                plt.legend()
+                plt.show()
+
+            8. 상관관계 분석
+                피어슨 상관계수 - 두 데이터 집합 간의 상관도를 분석할 때 사용
+                -1에 가까우면 서로 반대 방향으로, 1에 가까우면 서로 같은 방향으로, 0에 가까우면 서로 무관
+
+                merge_df.iloc[:, 1:].corr() >> 분석하려는 열을 추출해(iloc) 상관관계를 계산(corr)
