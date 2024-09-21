@@ -38,4 +38,4 @@ Python을 사용하니까 그 기초를 좀 보자
             >> 서버에 데이터 요청 : request(url) - response : json(str)
             >> 서버에서 받은 데이터 파싱(형태 변경) - json(str) - list, dict - DataFrame
         
-        
+        이거 잘 되고 있는건가
